@@ -1,0 +1,13 @@
+
+type Deposit @entity {
+  id: ID!
+  transactionHash: String
+  sender: Bytes
+  amount: String
+  token: Bytes
+  blockNumber: BigInt
+  timestamp: BigInt
+  isValidDepositor: Boolean
+  event: String
+  targetContract: Bytes
+}

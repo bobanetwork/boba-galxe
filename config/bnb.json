@@ -1,0 +1,14 @@
+{
+  "network": "bsc",
+  "contracts": {
+    "Proxy__L1StandardBridge": {
+      "address": "0x1E0f7f4b2656b14C161f1caDF3076C02908F9ACC",
+      "startBlock": 21305940,
+      "event": "NativeTokenDepositInitiated(indexed address,indexed address,uint256,bytes)"
+    },
+    "Proxy__L1LiquidityPool": {
+      "address": "0x88b5d70be4fc644c55b164AD09A3DFD44E31eC59",
+      "startBlock": 21305940
+    }
+  }
+}

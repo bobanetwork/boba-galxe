@@ -1,0 +1,14 @@
+{
+  "network": "moonbeam",
+  "contracts": {
+    "Proxy__L1StandardBridge": {
+      "address": "0xAf5297f68D48cd2DE37Ee5cbaC0647fbA4132985",
+      "startBlock": 1687934,
+      "event": "NativeTokenDepositInitiated(indexed address,indexed address,uint256,bytes)"
+    },
+    "Proxy__L1LiquidityPool": {
+      "address": "0x3fBc139f80a474c9B19A734e9ABb285b6550dF58",
+      "startBlock": 1687934
+    }
+  }
+}

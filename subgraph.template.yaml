@@ -1,0 +1,49 @@
+specVersion: 0.0.4
+description: L1 Bridges
+repository: https://github.com/bobanetwork
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Proxy__L1LiquidityPool
+    network: {{network}}
+    source:
+      address: '{{contracts.Proxy__L1LiquidityPool.address}}'
+      startBlock: {{ contracts.Proxy__L1LiquidityPool.startBlock }}
+      abi: Proxy__L1LiquidityPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Proxy__L1LiquidityPool
+      abis:
+        - name: Proxy__L1LiquidityPool
+          file: ./abis/Proxy__L1LiquidityPool.json
+      eventHandlers:
+        - event: ClientDepositL1(address,uint256,address)
+          handler: handleLPClientDepositL1
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: Proxy__L1StandardBridge
+    network: {{network}}
+    source:
+      address: '{{contracts.Proxy__L1StandardBridge.address}}'
+      startBlock: {{ contracts.Proxy__L1StandardBridge.startBlock }}
+      abi: Proxy__L1StandardBridge
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Proxy__L1StandardBridge
+      abis:
+        - name: Proxy__L1StandardBridge
+          file: ./abis/Proxy__L1StandardBridge.json
+      eventHandlers:
+        - event: ERC20DepositInitiated(indexed address,indexed address,indexed address,address,uint256,bytes)
+          handler: handleStandardBridgeERC20DepositInitiated
+        - event: {{ contracts.Proxy__L1StandardBridge.event }}
+          handler: handleStandardBridgeETHDepositInitiated
+      file: ./src/mapping.ts

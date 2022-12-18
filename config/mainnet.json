@@ -1,0 +1,14 @@
+{
+  "network": "mainnet",
+  "contracts": {
+    "Proxy__L1LiquidityPool": {
+      "address": "0x1A26ef6575B7BBB864d984D9255C069F6c361a14",
+      "startBlock": 13013879,
+      "event": "ETHDepositInitiated(indexed address,indexed address,uint256,bytes)"
+    },
+    "Proxy__L1StandardBridge": {
+      "address": "0xdc1664458d2f0B6090bEa60A8793A4E66c2F1c00",
+      "startBlock": 13012048
+    }
+  }
+}

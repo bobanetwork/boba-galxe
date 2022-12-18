@@ -1,0 +1,24 @@
+{
+  "name": "@boba/galxe",
+  "version": "1.0.0",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:bnb": "mustache config/bnb.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:moonbeam": "mustache config/moonbeam.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:avalanche": "mustache config/avalanche.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:subgraph:mainnet": "yarn prepare:mainnet && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-mainnet",
+    "deploy:subgraph:bnb": "yarn prepare:bnb && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-bnb",
+    "deploy:subgraph:moonbeam": "yarn prepare:moonbeam && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-moonbeam",
+    "deploy:subgraph:avalanche": "yarn prepare:avalanche && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-avalanche"
+  },
+  "author": "BOBA Network",
+  "license": "MIT",
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.37.1",
+    "@graphprotocol/graph-ts": "^0.29.0",
+    "ethers": "^5.7.2",
+    "mustache": "^4.2.0"
+  }
+}
