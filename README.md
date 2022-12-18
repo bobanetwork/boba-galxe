@@ -20,7 +20,7 @@ https://api.thegraph.com/subgraphs/name/bobanetwork/boba-galxe-moonbeam
 
 ## Example Requests
 
-To test whether a wallet address is qualified the condition of bridging $50
+To test whether a wallet address is qualified for the condition of bridging $50
 
 ```mysql
 # Query
