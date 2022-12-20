@@ -22,7 +22,9 @@ dataSources:
           file: ./abis/Proxy__L1LiquidityPool.json
       eventHandlers:
         - event: ClientDepositL1(address,uint256,address)
-          handler: handleLPClientDepositL1
+          handler: handleClientDepositL1
+        - event: ClientDepositL1Batch((address,address,uint256)[])
+          handler: handleClientDepositL1Batch
       file: ./src/mapping.ts
 
   - kind: ethereum/contract

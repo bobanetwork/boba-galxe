@@ -1,10 +1,11 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address, BigInt } from '@graphprotocol/graph-ts'
 
 import { ERC20DepositInitiated, ETHDepositInitiated } from '../generated/Proxy__L1StandardBridge/Proxy__L1StandardBridge'
-import { ClientDepositL1 } from '../generated/Proxy__L1LiquidityPool/Proxy__L1LiquidityPool'
+import { ClientDepositL1, ClientDepositL1Batch } from '../generated/Proxy__L1LiquidityPool/Proxy__L1LiquidityPool'
 import { Deposit } from '../generated/schema'
 
-import { isValidDepositor, parseAddressInput } from './tokenFilter'
+import { isValidDepositor, parseAddressInput, getUSDValue } from './utils'
+import { zeroAddress } from './constants'
 
 export function handleStandardBridgeERC20DepositInitiated(event: ERC20DepositInitiated): void {
   let txHash = event.transaction.hash.toHex()
@@ -24,6 +25,11 @@ export function handleStandardBridgeERC20DepositInitiated(event: ERC20DepositIni
     parseAddressInput(event.params._l1Token),
     parseAddressInput(event.transaction.to)
   )
+  storage.USDValue = getUSDValue(
+    parseAddressInput(event.params._l1Token),
+    event.params._amount,
+    parseAddressInput(event.transaction.to)
+  )
 
   storage.save()
 }
@@ -34,7 +40,7 @@ export function handleStandardBridgeETHDepositInitiated(event: ETHDepositInitiat
   storage.id = txHash
   storage.transactionHash = txHash
   storage.sender = event.params._from
-  storage.token = Address.fromString('0x0000000000000000000000000000000000000000')
+  storage.token = Address.fromString(zeroAddress)
   storage.amount = event.params._amount.toString()
   storage.blockNumber = event.block.number
   storage.timestamp = event.block.timestamp
@@ -47,10 +53,16 @@ export function handleStandardBridgeETHDepositInitiated(event: ETHDepositInitiat
     parseAddressInput(event.transaction.to)
   )
 
+  storage.USDValue = getUSDValue(
+    parseAddressInput(Address.fromString(zeroAddress)),
+    event.params._amount,
+    parseAddressInput(event.transaction.to)
+  )
+
   storage.save()
 }
 
-export function handleLPClientDepositL1(event: ClientDepositL1): void {
+export function handleClientDepositL1(event: ClientDepositL1): void {
   let txHash = event.transaction.hash.toHex()
   let storage = new Deposit(txHash)
 
@@ -69,6 +81,48 @@ export function handleLPClientDepositL1(event: ClientDepositL1): void {
     parseAddressInput(event.params.tokenAddress),
     parseAddressInput(event.transaction.to)
   )
+  storage.USDValue = getUSDValue(
+    parseAddressInput(event.params.tokenAddress),
+    event.params.receivedAmount,
+    parseAddressInput(event.transaction.to)
+  )
+
+  storage.save()
+}
+
+export function handleClientDepositL1Batch(event: ClientDepositL1Batch): void {
+  let txHash = event.transaction.hash.toHex()
+  let storage = new Deposit(txHash)
+
+  storage.id = txHash
+  storage.transactionHash = txHash
+  storage.sender = event.transaction.from
+  storage.blockNumber = event.block.number
+  storage.timestamp = event.block.timestamp
+
+  const amount: String[] = []
+  const tokens: String[] = []
+  let USDValue = BigInt.fromString('0')
+
+  const payloadLength = event.parameters.length
+  for (let i = 0; i < payloadLength; i++) {
+    const payload = event.params._tokens
+    amount.push(payload[i].amount.toString())
+    tokens.push(parseAddressInput(payload[i].l2TokenAddress))
+    const USDValueSrt = getUSDValue(parseAddressInput(payload[i].l2TokenAddress), payload[i].amount, parseAddressInput(event.transaction.to))
+    USDValue = USDValue.plus(BigInt.fromString(USDValueSrt))
+  }
+
+  storage.batchAmounts = amount.toString()
+  storage.batchTokens = tokens.toString()
+  storage.USDValue = USDValue.toString()
+  storage.event = 'ClientDepositL1Batch'
+
+  if (USDValue.ge(BigInt.fromString('50'))) {
+    storage.isValidDepositor = true
+  } else {
+    storage.isValidDepositor = false
+  }
 
   storage.save()
 }

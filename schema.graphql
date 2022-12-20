@@ -5,6 +5,9 @@ type Deposit @entity {
   sender: Bytes
   amount: String
   token: Bytes
+  batchAmounts: String
+  batchTokens: String
+  USDValue: String
   blockNumber: BigInt
   timestamp: BigInt
   isValidDepositor: Boolean

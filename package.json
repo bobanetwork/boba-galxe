@@ -11,14 +11,24 @@
     "deploy:subgraph:mainnet": "yarn prepare:mainnet && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-mainnet",
     "deploy:subgraph:bnb": "yarn prepare:bnb && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-bnb",
     "deploy:subgraph:moonbeam": "yarn prepare:moonbeam && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-moonbeam",
-    "deploy:subgraph:avalanche": "yarn prepare:avalanche && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-avalanche"
+    "deploy:subgraph:avalanche": "yarn prepare:avalanche && yarn codegen && yarn build && graph deploy --product hosted-service bobanetwork/boba-galxe-avalanche",
+    "test": "hardhat test --show-stack-traces"
   },
   "author": "BOBA Network",
   "license": "MIT",
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.37.1",
     "@graphprotocol/graph-ts": "^0.29.0",
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@types/chai": "^4.3.4",
+    "chai": "^4.3.7",
+    "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
-    "mustache": "^4.2.0"
+    "hardhat": "^2.12.4",
+    "mocha": "^10.2.0",
+    "mustache": "^4.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   }
 }
